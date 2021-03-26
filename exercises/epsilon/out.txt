@@ -1,0 +1,18 @@
+While:	 Max int =  2147483647
+Do:	 Max int =  2147483647
+For:	 Max int =  2147483647
+While:	 Min int = -2147483648
+Do:	 Min int = -2147483648
+For:	 Min int = -2147483648
+Compare: INT_MAX =  2147483647
+	 INT_MIN = -2147483648
+
+While:	 float epsilon =	 1.19209e-07
+While:	 double epsilon =	 2.22045e-16
+While:	 long double epsilon =	 1.0842e-19
+Do:	 float epsilon =	 1.19209e-07
+Do:	 double epsilon =	 2.22045e-16
+Do:	 long double epsilon =	 1.0842e-19
+For:	 float epsilon =	 1.19209e-07
+For:	 double epsilon =	 2.22045e-16
+For:	 long double epsilon =	 1.0842e-19
