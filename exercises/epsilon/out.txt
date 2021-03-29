@@ -16,3 +16,15 @@ Do:	 long double epsilon =	 1.0842e-19
 For:	 float epsilon =	 1.19209e-07
 For:	 double epsilon =	 2.22045e-16
 For:	 long double epsilon =	 1.0842e-19
+sum_up_f = 15.403683
+sum_down_f = 18.807919
+Precision is best when adding numbers of appromately equal size
+Given better precision it would, but that isn't the case with floats
+sum_up_d = 21.371631
+sum_down_d = 21.371631
+a = 1.0000000000000011
+b = 1.0000000000000000
+a and b are not equal
+a = 1.0000000000000000
+b = 1.0000000000000000
+a and b are equal

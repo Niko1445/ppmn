@@ -2,6 +2,8 @@
 #include<limits.h>
 #include<float.h>
 
+int equal(double a, double b, double tau, double epsilon);
+
 int main() {
 
   int i=1;
@@ -107,5 +109,43 @@ int main() {
   ld*=2;
   printf("For:\t long double epsilon =\t %Lg\n", ld);
 
+
+  int max = INT_MAX/2;
+  float sum_up_f = 0.0;
+  float sum_down_f = 0.0;
+  for (int i = 1; i < max; i++) {
+    sum_up_f+=1.0/i;
+    sum_down_f+=1.0/(max-i);
+  }
+  printf("sum_up_f = %f\nsum_down_f = %f\n", sum_up_f,sum_down_f);
+  printf("Precision is best when adding numbers of appromately equal size\n");
+  printf("Given better precision it would, but that isn't the case with floats\n");
+
+  double sum_up_d = 0.0;
+  double sum_down_d = 0.0;
+  for (int i = 1; i < max; i++) {
+    sum_up_d+=1.0/i;
+    sum_down_d+=1.0/(max-i);
+  }
+  printf("sum_up_d = %lf\nsum_down_d = %lf\n", sum_up_d,sum_down_d);
+
+  double a = 1.000000000000001;
+  double b = 1.0;
+  double epsilon = DBL_EPSILON;
+  double tau = 0.0;
+  printf("a = %.16lf\nb = %.16lf\n", a,b);
+  if (equal(a,b,tau,epsilon)) {
+    printf("a and b are equal\n");
+  } else {
+    printf("a and b are not equal\n");
+  }
+  a = 1.0000000000000001;
+  b = 1.0;
+  printf("a = %.16lf\nb = %.16lf\n", a,b);
+  if (equal(a,b,tau,epsilon)) {
+    printf("a and b are equal\n");
+  } else {
+    printf("a and b are not equal\n");
+  }
   return 0;
 }

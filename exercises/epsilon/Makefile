@@ -6,7 +6,14 @@ out.txt: main
 	./main > out.txt
 	cat out.txt
 
-main: main.c
+main: equal.o epsilon.o
+	$(CC) $^ -o $@
+
+equal.o: equal.c
+	$(CC) -c $^ -o $@ $(CFLAGS)
+
+epsilon.o: epsilon.c
+	$(CC) -c $^ -o $@ $(CFLAGS)
 
 .PHNOEY: clean
 clean:
