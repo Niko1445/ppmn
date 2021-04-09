@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<float.h>
 #include<math.h>
 
 int equal(double a, double b, double tau, double epsilon){

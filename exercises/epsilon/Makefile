@@ -17,4 +17,4 @@ epsilon.o: epsilon.c
 
 .PHNOEY: clean
 clean:
-	$(RM) main out.txt
+	$(RM) main out.txt *.o
