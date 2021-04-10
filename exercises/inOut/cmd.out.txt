@@ -1,0 +1,5 @@
+cmd input_1 = 1	input sin = 0.841471	input cos = 0.540302 
+cmd input_2 = 2	input sin = 0.909297	input cos = -0.416147 
+cmd input_3 = 3	input sin = 0.141120	input cos = -0.989992 
+cmd input_4 = 4	input sin = -0.756802	input cos = -0.653644 
+cmd input_5 = 5	input sin = -0.958924	input cos = 0.283662 
