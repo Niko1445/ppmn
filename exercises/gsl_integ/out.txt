@@ -1,0 +1,1 @@
+integral log from 0 to 1 eqauls         -1
