@@ -3,14 +3,6 @@ CFLAGS = $(shell gsl-config --cflags)
 LDLIBS = $(shell gsl-config --libs)
 
 
-
-out.txt: main
-	./main > out.txt
-	cat out.txt
-
-
-main: main.c
-
 erf.pyxplot.png: out.txt
 	echo '\
 	set terminal png;\
@@ -21,10 +13,18 @@ erf.pyxplot.png: out.txt
 	set ylabel "y";\
 	set title "Error function";\
 	plot \
-	 "$<" using 1:2 with line title "erf from math.h"\
-	,"$<" using 1:3 with line title "gsl-sf-erf"\
-	,"$<" using 1:4 with line title "homemade Erf"\
+	 "erf_data.txt" using 1:2 with line title "integral erf"\
 	' | pyxplot
+
+
+out.txt: main
+	./main > out.txt
+	cat out.txt
+
+
+main: main.c
+
+
 
 .PHNOEY: clean
 clean:
