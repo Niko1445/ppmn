@@ -2,74 +2,73 @@
 #include <math.h>
 #include <pthread.h>
 #include <stdlib.h>
+#ifndef THREAD_COUNT
+#define THREAD_COUNT 8
+#endif
+#ifndef THREAD_POINTS
+#define THREAD_POINTS 1e8
+#endif
 
-int thread_count = 4;
-int thread_points = 10000;
-int thread_data[thread_count] = {0,0,0,0};
-//int inPoints = 0;
+struct thread_data{
+  int thread_id;
+  int count;
+  int seed;
+};
+
+struct thread_data thread_data_array[THREAD_COUNT];
+
 
 void* carlo(void* arg){
-  int thread_id = *(int*) arg;
-  printf("%d\n",thread_id);
-  //int in = 0;
-  for (int i = 0; i < thread_points; i++) {
-    double x = (double)rand_r(&thread_id) / (double)RAND_MAX;
-    double y = (double)rand_r(&thread_id) / (double)RAND_MAX;
+  struct thread_data* this_data;
+  int tid, tcount, tseed;
+
+  this_data = (struct thread_data*) arg;
+  tid = this_data->thread_id;
+  tcount = 0;
+  tseed = this_data->seed;
+
+  for (int i = 0; i < THREAD_POINTS; i++) {
+    double x = (double)rand_r(&tseed) / (double)RAND_MAX;
+    double y = (double)rand_r(&tseed) / (double)RAND_MAX;
     double l = sqrt(x*x + y*y);
     if (l <= 1) {
       //inPoints++;
-      thread_data[thread_id]++;
+      tcount++;
     }
   }
-  printf("thread %d has %d counts\n",thread_id, thread_data[thread_id] );
-  pthread_exit((void*) &thread_id);
+  this_data->count = tcount;
+  printf("thread %d has %d counts\n",tid, tcount );
+  pthread_exit(NULL);
 }
-/*
-int main() {
-  int seed = 2;
-  int len = 10000;
-  int list[2] = {seed,len};
-  for (int x = 0; x < 2; x++) {
-    printf("%d\n",list[x] );
-  }
-  int x = point(list);
-  printf("%d\n",x);
-  double p = 4 * x / len;
-  printf("Pi is roughly equal to %f\n",p);
-  return 0;
-}
-*/
 
 int main() {
-
-
-
-
   int inPoints = 0;
-  int totalPoints = thread_count*thread_points;
+  int totalPoints = THREAD_COUNT*THREAD_POINTS;
 
   int status;
-  pthread_t threads[thread_count];
+  pthread_t threads[THREAD_COUNT];
+
   pthread_attr_t* attributes = NULL;
 
 
-  int seeds[thread_count];
-  for (int x = 0; x < thread_count; x++) {
+  int seeds[THREAD_COUNT];
+  for (int x = 0; x < THREAD_COUNT; x++) {
     seeds[x]=rand();
   }
-  for (int x = 0; x < thread_count; x++) {
-    int args = x;
-    int rc = pthread_create(&threads[x], attributes, carlo, (void*)&args);
+  for (int x = 0; x < THREAD_COUNT; x++) {
+    thread_data_array[x].thread_id = x;
+    thread_data_array[x].seed = seeds[x];
+    int rc = pthread_create(&threads[x], attributes, carlo, (void*)&thread_data_array[x]);
   }
-  for (int x = 0; x < thread_count; x++) {
+  for (int x = 0; x < THREAD_COUNT; x++) {
     int rc = pthread_join(threads[x],(void*)&status);
   }
-  for (int x = 0; x < thread_count; x++) {
-    inPoints+=thread_data[x];
+  for (int x = 0; x < THREAD_COUNT; x++) {
+    inPoints+=thread_data_array[x].count;
   }
-  printf("%d\n",inPoints );
+  double pi_est = 4*(double)inPoints/(double)totalPoints;
+  printf("sum of thread counts: %d\n",inPoints );
+  printf("Estimated pi: %g\n",pi_est );
 
   return 0;
 }
-//https://stackoverflow.com/questions/26805461/why-do-i-get-cast-from-pointer-to-integer-of-different-size-error
-//https://hpc-tutorials.llnl.gov/posix/passing_args/
