@@ -1,0 +1,10 @@
+thread 4 has 78542424 counts
+thread 3 has 78540610 counts
+thread 5 has 78539803 counts
+thread 2 has 78542629 counts
+thread 1 has 78537111 counts
+thread 0 has 78540828 counts
+thread 6 has 78542079 counts
+thread 7 has 78537562 counts
+sum of thread counts: 628323046
+Estimated pi: 3.14162
