@@ -1,0 +1,4 @@
+z = {18.265, 3.90819}
+linear integral from 0 to 18.265 is 19.3261 
+gsl z = {18.265, 3.90819}
+gsl linear integral from 0 to 18.265 is 19.3261 
