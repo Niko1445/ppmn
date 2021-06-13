@@ -230,5 +230,11 @@ int main() {
   matrix_print(part_B, m, m, I);
 
   fclose(part_B);
+
+  gsl_matrix_free(A);
+  gsl_matrix_free(Q);
+  gsl_matrix_free(R);
+  gsl_matrix_free(B);
+  gsl_matrix_free(I);
   return 0;
 }
