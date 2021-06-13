@@ -13,7 +13,7 @@ double gsl_vector_length(int n, gsl_vector* vec){
   return sum;
 }
 
-void print_matrix(FILE* stream, int n, int m, const gsl_matrix *X){
+void matrix_print(FILE* stream, int n, int m, const gsl_matrix *X){
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < m; j++) {
       fprintf(stream,"%0.3f ",gsl_matrix_get(X,i,j));
@@ -84,6 +84,19 @@ void GS_solve(int n, gsl_matrix *Q, gsl_matrix *R, gsl_vector *b, gsl_vector *x)
   }
 }
 
+void givens_qr_inverse(int n, gsl_matrix *Q, gsl_matrix *R, gsl_matrix *B){
+  gsl_vector *e = gsl_vector_alloc(n);
+  gsl_vector *buf = gsl_vector_alloc(n);
+  gsl_matrix_set_identity(B);
+  for(int i = 0; i<n ; i++){
+    gsl_matrix_get_col(e, B, i);
+    GS_solve(n, Q, R, e, buf);
+    gsl_matrix_set_col(B, i, buf);
+  }
+  gsl_vector_free(e);
+  gsl_vector_free(buf);
+}
+
 int main() {
   int n, m;
   n = 6;
@@ -92,7 +105,7 @@ int main() {
   gsl_matrix *B = gsl_matrix_alloc(m, m);
   gsl_matrix *C = gsl_matrix_alloc(m, m);
   gsl_matrix *D = gsl_matrix_alloc(n, m);
-  int seed = 2;
+  int seed = 3;
 
   for (int i = 0; i < n; i++) {
     for (size_t j = 0; j < m; j++) {
@@ -101,27 +114,27 @@ int main() {
   }
   FILE* part_A = fopen("data_A_1.txt","w");
   fprintf(part_A, "Matrix A\n" );
-  print_matrix(part_A, n, m , A);
+  matrix_print(part_A, n, m , A);
 
   GS_decomp(n, m, A, B);
 
 
   fprintf(part_A, "Matrix Q\n" );
-  print_matrix(part_A, n, m , A);
+  matrix_print(part_A, n, m , A);
 
   fprintf(part_A, "Matrix R\n" );
-  print_matrix(part_A, m, m , B);
+  matrix_print(part_A, m, m , B);
 
   gsl_blas_dgemm(CblasTrans,CblasNoTrans, 1, A, A, 0, C);
 
   fprintf(part_A, "Q^T Q\n" );
-  print_matrix(part_A, m, m, C);
+  matrix_print(part_A, m, m, C);
 
 
   gsl_blas_dgemm(CblasNoTrans,CblasNoTrans, 1, A, B, 0, D);
 
   fprintf(part_A, "Q^T R = A\n" );
-  print_matrix(part_A, n, m, D);
+  matrix_print(part_A, n, m, D);
 
   fclose(part_A);
   gsl_matrix_free(A);
@@ -147,16 +160,16 @@ int main() {
 
   gsl_matrix_memcpy(A,Q);
   fprintf(part_A_2, "Matrix A\n" );
-  print_matrix(part_A_2, m, m, A);
+  matrix_print(part_A_2, m, m, A);
 
   GS_decomp(m, m, Q, R);
 
   GS_solve(m, Q, R, b, x);
 
   fprintf(part_A_2, "Matrix Q\n" );
-  print_matrix(part_A_2, m, m, Q);
+  matrix_print(part_A_2, m, m, Q);
   fprintf(part_A_2, "Matrix R\n" );
-  print_matrix(part_A_2, m, m, R);
+  matrix_print(part_A_2, m, m, R);
   fprintf(part_A_2, "Vector b\n" );
   vector_print(part_A_2, m, b);
   fprintf(part_A_2, "Vector x\n" );
@@ -175,5 +188,47 @@ int main() {
   gsl_vector_free(b);
   gsl_vector_free(x);
   gsl_vector_free(y);
+
+  // part B
+
+  A = gsl_matrix_alloc(m, m);
+  Q = gsl_matrix_alloc(m, m);
+  R = gsl_matrix_alloc(m, m);
+  B = gsl_matrix_alloc(m, m);
+
+  for (int i = 0; i < m; i++) {
+    for (size_t j = 0; j < m; j++) {
+      gsl_matrix_set(Q, i, j, (double)rand_r(&seed)/(double)RAND_MAX*10);
+      gsl_matrix_set(R, i, j, 0.);
+    }
+  }
+  gsl_matrix_memcpy(A,Q);
+
+  GS_decomp(m, m, Q, R);
+
+  givens_qr_inverse(m, Q, R, B);
+
+  FILE* part_B = fopen("data_B","w");
+
+  fprintf(part_B, "Matrix A\n" );
+  matrix_print(part_B, m, m, A);
+  fprintf(part_B, "Matrix Q\n" );
+  matrix_print(part_B, m, m, Q);
+  fprintf(part_B, "Matrix R\n" );
+  matrix_print(part_B, m, m, R);
+  fprintf(part_B, "Matrix B\n" );
+  matrix_print(part_B, m, m, B);
+
+  gsl_matrix *I =gsl_matrix_alloc(m, m);
+
+  gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, B, A, 0, I);
+  fprintf(part_B, "B^-1 * A = I\n");
+  matrix_print(part_B, m, m, I);
+
+  gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,1,A,B,0,I);
+  fprintf(part_B, "A * B^-1 = I\n");
+  matrix_print(part_B, m, m, I);
+
+  fclose(part_B);
   return 0;
 }
