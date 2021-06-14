@@ -88,8 +88,12 @@ void GS_solve(gsl_matrix *Q, gsl_matrix *R, gsl_vector *b, gsl_vector *x) {
   }
 }
 
-void givens_qr_inverse(gsl_matrix *Q, gsl_matrix *R, gsl_matrix *B){
-  int n = R->size1;
+void QR_inverse(gsl_matrix *Q, gsl_matrix *B){
+  int n = Q->size2;
+  gsl_matrix *R = gsl_matrix_alloc(n, n);
+  gsl_matrix *A = gsl_matrix_alloc(Q->size1, Q->size2);
+  gsl_matrix_memcpy(A, Q);
+  GS_decomp(Q, R);
 
   gsl_vector *e = gsl_vector_alloc(n);
   gsl_vector *buf = gsl_vector_alloc(n);
@@ -99,6 +103,9 @@ void givens_qr_inverse(gsl_matrix *Q, gsl_matrix *R, gsl_matrix *B){
     GS_solve(Q, R, e, buf);
     gsl_matrix_set_col(B, i, buf);
   }
+  gsl_matrix_memcpy(Q, A);
   gsl_vector_free(e);
   gsl_vector_free(buf);
+  gsl_matrix_free(R);
+  gsl_matrix_free(A);
 }

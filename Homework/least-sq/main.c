@@ -14,7 +14,7 @@ double fun_k(int i, double x){
   }
 }
 
-void exp_fit(gsl_vector *x, gsl_vector *y, gsl_vector *dy, gsl_matrix *A, gsl_vector *c){
+void exp_fit(gsl_vector *x, gsl_vector *y, gsl_vector *dy, gsl_matrix *A, gsl_vector *c, gsl_vector *dc){
   gsl_vector *b = gsl_vector_alloc(y->size);
 
   for (int i = 0; i < A->size1; i++) {
@@ -26,14 +26,23 @@ void exp_fit(gsl_vector *x, gsl_vector *y, gsl_vector *dy, gsl_matrix *A, gsl_ve
 
   gsl_matrix *Q = gsl_matrix_alloc(y->size, c->size);
   gsl_matrix *R = gsl_matrix_alloc(c->size, c->size);
+  gsl_matrix *B = gsl_matrix_alloc(c->size, c->size);
   gsl_matrix_memcpy(Q, A);
 
   GS_decomp(Q, R);
 
   GS_solve(Q, R, b, c);
 
+  gsl_blas_dgemm(CblasTrans, CblasNoTrans, 1, A, A, 0, R);
+  QR_inverse(R, B);
+
+  for (int i = 0; i < R->size1; i++) {
+    gsl_vector_set(dc, i, sqrt(gsl_matrix_get(B, i, i)));
+  }
+
   gsl_matrix_free(Q);
   gsl_matrix_free(R);
+  gsl_matrix_free(B);
   gsl_vector_free(b);
 
 }
@@ -45,6 +54,7 @@ int main() {
   gsl_vector *y =gsl_vector_alloc(len);
   gsl_vector *dy =gsl_vector_alloc(len);
   gsl_vector *c =gsl_vector_alloc(2);
+  gsl_vector *dc =gsl_vector_alloc(2);
 
 
   double t_data[] = {1,2,3,4,6,9,10,13,15};
@@ -58,7 +68,7 @@ int main() {
 
   gsl_matrix *A = gsl_matrix_alloc(t->size,c->size);
 
-  exp_fit(t, y, dy, A, c);
+  exp_fit(t, y, dy, A, c, dc);
 
   FILE* fit_stream = fopen("fit_data.txt","w");
 
@@ -89,6 +99,11 @@ int main() {
   printf("Vector c\n");
   vector_print(stdout, c);
 
-  printf("Half life of 224Ra is found to be %g days\nsources say the actual half life is around 3.6 days", logf(2)/(gsl_vector_get(c,1)));
+  printf("Vector dc\n");
+  vector_print(stdout, dc);
+
+  printf("Half life of 224Ra is found to be between %g and %g days\nSources say the actual half life is around 3.6 days\n",\
+   logf(2)/(gsl_vector_get(c,1) - gsl_vector_get(dc,1)), logf(2)/(gsl_vector_get(c,1) + gsl_vector_get(dc,1)));
+  printf("The value of the half life of 224Ra found does not agree with the modern value of 3.6319(23) days\n");
   return 0;
 }

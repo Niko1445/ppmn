@@ -21,5 +21,9 @@ Matrix A
 Vector c
 4.95867 0.171379 
 
-Half life of 224Ra is found to be 4.04452 days
-sources say the actual half life is around 3.6 days
+Vector dc
+0.0298375 0.00353553 
+
+Half life of 224Ra is found to be between 4.12971 and 3.96277 days
+Sources say the actual half life is around 3.6 days
+The value of the half life of 224Ra found does not agree with the modern value of 3.6319(23) days
