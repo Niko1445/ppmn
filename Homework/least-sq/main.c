@@ -73,7 +73,9 @@ int main() {
   FILE* fit_stream = fopen("fit_data.txt","w");
 
   for (double i = 1; i < 20; i+=0.1) {
-    fprintf(fit_stream, "%g  %g\n",i, gsl_vector_get(c,0) - gsl_vector_get(c, 1)*i);
+    fprintf(fit_stream, "%g  %g  %g  %g\n",i, gsl_vector_get(c,0) - gsl_vector_get(c, 1)*i,\
+     (gsl_vector_get(c,0) - gsl_vector_get(dc,0)) - (gsl_vector_get(c, 1) - gsl_vector_get(dc,1))*i,\
+     (gsl_vector_get(c,0) + gsl_vector_get(dc,0)) - (gsl_vector_get(c, 1) + gsl_vector_get(dc,1))*i);
   }
 
   fclose(fit_stream);
