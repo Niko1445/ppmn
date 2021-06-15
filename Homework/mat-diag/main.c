@@ -128,6 +128,7 @@ int main() {
 
   jacobi_diag(H, V);
 
+  printf("Energies: calculated, exact\n" );
   for (int k=0; k < n/3; k++){
     double exact = M_PI*M_PI*(k+1)*(k+1);
     double calculated = gsl_matrix_get(H,k,k);
