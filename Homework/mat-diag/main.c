@@ -134,6 +134,7 @@ int main() {
     double calculated = gsl_matrix_get(H,k,k);
     printf("%i %g %g\n",k,calculated,exact);
   }
+printf("Energies calculated become increasingly accurate with higher n\n");
   gsl_vector *a = gsl_vector_alloc(n);
   double scale;
   for (int x = 0; x < 3; x++) {
@@ -143,6 +144,9 @@ int main() {
       gsl_matrix_set(V,y,x, gsl_matrix_get(V,y,x)/scale);
     }
   }
+
+	printf("\nComparing the numeric and analytical results for the wavefunction\n"
+	"we obersve no visible difference when both are normalized\n");
 
   FILE *data_stream = fopen("data_B.txt","w");
   fprintf(data_stream,"%g  %g  %g  %g  %g  %g  %g\n", 0.,0.,0.,0.,0.,0.,0.);

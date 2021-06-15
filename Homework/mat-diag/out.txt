@@ -49,3 +49,7 @@ Energies: calculated, exact
 17 2975.21 3197.75
 18 3287.55 3562.93
 19 3610.91 3947.84
+Energies calculated become increasingly accurate with higher n
+
+Comparing the numeric and analytical results for the wavefunction
+we obersve no visible difference when both are normalized
