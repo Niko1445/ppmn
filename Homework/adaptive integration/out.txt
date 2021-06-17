@@ -1,0 +1,3 @@
+f(x)=1/sqrt(x)  Q = 1.99999, calls = 12848
+f(x)=sqrt(x)-2/3  Q = 0.000116062, calls = 20
+f(x)=4*sqrt(x)-pi  Q = 3.25866e-05, calls = 52
