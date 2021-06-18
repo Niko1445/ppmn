@@ -1,10 +1,5 @@
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-#include "vec_calc.h"
 #include <assert.h>
 
 double adapt24 (double f (double ), double a, double b,
@@ -27,13 +22,13 @@ double adapt (double f(double), double a, double b, double acc, double eps){
 
 
 
-int main() { // uses gcc nested functions
+int main() {
 	int calls=0; double a=0, b=1, acc=0.0005, eps = 0.00001;
 	double Q;
 	double f(double x){
 		calls++;
 		return 1/sqrt(x);
-	}; // nested function
+	};
 
 	double fun1(double x){
 		calls++;

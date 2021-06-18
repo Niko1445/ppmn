@@ -1,0 +1,24 @@
+Format: integral  error
+expected result = 0
+Plain Monte Carlo
+1.03843e-05 7.45501e-05 
+
+Low-discrepancy Monte Carlo
+-5.26815e-07 2.25267e-08 
+
+expected result = 1.83333
+Plain Monte Carlo
+1.83362 0.000418332 
+
+Low-discrepancy Monte Carlo
+1.83333 2.05586e-07 
+
+expected result = 1.39320
+Plain Monte Carlo
+1.395 0.00429087 
+
+Low-discrepancy Monte Carlo
+1.38897 5.88012e-05 
+
+For the same amount of points the low-discrepancy Monte Carlo method
+attains a more accurate result and lower errors
