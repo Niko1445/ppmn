@@ -1,0 +1,12 @@
+1D function: f(x) = x*2+1 
+-0.5 
+
+2D function: f(x) = x*2 + y*2 
+0 0 
+
+Valley function 
+0.386381 0.146272 
+
+Optimal minimum is in 1,1 but from the sheer flatness of the
+valley function obtaining this minimum would take a very long
+time and a very low epsilon 
