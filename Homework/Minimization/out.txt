@@ -1,0 +1,21 @@
+Initial point for minimization = 10, 5
+Valley function
+Steps:  84934
+Resets: 0
+Scales: 84933
+1.00001 1.00002 
+
+Initial point for minimization = 10, 10
+Test f(x) = (x+2)²+y² 
+Steps:  8723
+Resets: 8719
+Scales: 3
+2 -9.39175e-07 
+
+Initial point for minimization = 5, 5
+Himmelblau function
+Steps:  23
+Resets: 0
+Scales: 22
+-2.80512 3.13131 
+
