@@ -100,7 +100,6 @@ void rkstep32(
 	gsl_matrix_set_col(K, 0, k);
 
 	if (gsl_vector_isnull(k)) {
-		printf("k is null\n");
 		A32(args, f, 0, h, t, y, yn, k, err, K);
 		gsl_matrix_set_col(K, 0, k);
 	} else {

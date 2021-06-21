@@ -1,6 +1,6 @@
+#include <stdio.h>
 #include <math.h>
 #include <float.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
