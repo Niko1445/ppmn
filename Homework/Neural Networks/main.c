@@ -11,7 +11,7 @@
 
 
 double activation(double x) {
-  return x*exp(-x*x);
+  return exp(-x*x);
 }
 
 void neuron(
@@ -112,49 +112,76 @@ gsl_vector* learn(
   gsl_matrix *data_in,
   gsl_matrix *data_out,
   int neurons,
-  double eps)
+  double eps,
+  int *seed)
   {
 
   int p_len = 2 + data_out->size2;
   gsl_vector *p = gsl_vector_alloc(p_len * neurons);
-  gsl_vector_set_all(p, 3.);
+  //gsl_vector_set_all(p, 0.6);
+
+  for (int i = 0; i < p->size; i++) {
+    gsl_vector_set(p, i, (double) rand_r(seed)/ (double) RAND_MAX*5);
+  }
+
 
   //        COST SECTION
   vector_print(stdout, p);
-  qNewton(activation, cost, data_in, data_out, p, neurons, eps);
+  int loops = 0;
+  while (1) {
+    qNewton(activation, cost, data_in, data_out, p, neurons, eps);
+    loops++;
+    if (cost(activation, data_in, data_out, p, neurons) < eps){
+      break;
+    } else if (loops>2) {
+      break;
+    } else{
+      for (int i = 0; i < p->size; i++) {
+        gsl_vector_set(p, i, (double) rand_r(seed)/ (double) RAND_MAX*5);
+      }
+    }
+  }
   vector_print(stdout, p);
+  printf("loops = %d\n", loops);
   return p;
 }
 
 int main() {
-  int neurons = 3;
-  int n = 20, m_in = 1, m_out = 1;
-  int seed = 6;
+  int neurons = 8;
+  int n = 60, m_in = 1, m_out = 1;
+  int seed = 16;
   double eps = 1e-3;
 
   gsl_matrix *data_in = gsl_matrix_alloc(n, m_in);
   gsl_matrix *data_out = gsl_matrix_alloc(n, m_out);
 
+  FILE* data_stream = fopen("data_1.txt","w");
   for (int x = 0; x < n; x++) {
     for (int y = 0; y < m_in; y++) {
-      gsl_matrix_set(data_in, x, y, (double) rand_r(&seed)/ (double) RAND_MAX * 10);
-      gsl_matrix_set(data_out, x, y, (double) rand_r(&seed)/ (double) RAND_MAX * 10);
+      gsl_matrix_set(data_in, x, y, x/20.);
+      gsl_matrix_set(data_out, x, y, cos(x));
+      fprintf(data_stream, "%g  %g\n", gsl_matrix_get(data_in, x, y), gsl_matrix_get(data_out, x, y));
     }
   }
-
+  fclose(data_stream);
   gsl_vector *p;
   //matrix_print(stdout, data_in);
   //matrix_print(stdout, data_out);
 
-  p = learn(activation, cost, data_in, data_out, neurons, eps);
+  p = learn(activation, cost, data_in, data_out, neurons, eps, &seed);
 
   gsl_vector *x = gsl_vector_alloc(m_in);
   gsl_vector *y = gsl_vector_alloc(m_out);
 
-  gsl_vector_set(x, 0, 7.);
+  gsl_vector_set(x, 0, 1);
 
-  double network(activation, x, y, p, neurons);
+  network(activation, x, y, p, neurons);
+  FILE* point_stream = fopen("points.txt","w");
+  fprintf(point_stream, "%g  %g\n",gsl_vector_get(x, 0), gsl_vector_get(y, 0));
+  fclose(point_stream);
 
+  gsl_vector_free(x);
+  gsl_vector_free(y);
   gsl_matrix_free(data_in);
   gsl_matrix_free(data_out);
   gsl_vector_free(p);

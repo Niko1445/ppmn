@@ -130,7 +130,7 @@ void qNewton(
   gsl_vector_free(gradn);
   gsl_vector_free(sol);
   gsl_vector_free(dsol);
-  printf("Steps:  %d\n", nStep);
-  printf("Resets: %d\n", nReset);
-  printf("Scales: %d\n", nScale);
+  //printf("Steps:  %d\n", nStep);
+  //printf("Resets: %d\n", nReset);
+  //printf("Scales: %d\n", nScale);
 }
