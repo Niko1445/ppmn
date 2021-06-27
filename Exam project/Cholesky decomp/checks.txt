@@ -1,0 +1,34 @@
+Value checks
+n = 5
+Solving linear equations
+Vector x_CB
+13.0303 -6.21056 -2.38034 7.17999 -3.80595 
+
+Vector x_gsl
+13.0303 -6.21056 -2.38034 7.17999 -3.80595 
+
+Calculating inverse matrix
+Matrix I by CB
+1.608 -0.704 -0.059 -0.005 -0.000 
+-0.704 1.549 -0.709 -0.060 -0.005 
+-0.059 -0.709 1.548 -0.710 -0.065 
+-0.005 -0.060 -0.710 1.543 -0.769 
+-0.000 -0.005 -0.065 -0.769 0.839 
+
+Matrix I by gsl
+1.608 -0.704 -0.059 -0.005 -0.000 
+-0.704 1.549 -0.709 -0.060 -0.005 
+-0.059 -0.709 1.548 -0.710 -0.065 
+-0.005 -0.060 -0.710 1.543 -0.769 
+-0.000 -0.005 -0.065 -0.769 0.839 
+
+Calculating determinant of a matrix
+det_CB = 2.21651,  det_gsl = 2.21651
+Speed checks
+n = 1000
+Solving linear equations
+Time of CB = 3.61541, Time of gsl = 2.41036
+Calculating inverse matrix
+Time of CB = 25.4501, Time of gsl = 0.357173
+Calculating determinant of a matrix
+Time of CB = 3.52253, Time of gsl = 0.212724
