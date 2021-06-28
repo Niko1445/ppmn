@@ -11,4 +11,4 @@ won't be called for every solve but simply once. The former is simply for conven
 
 checks.txt shows that the values calculated are correct and that unsurprisingly, gsl function are way faster than mine.
 
-Optional self-evaluation out of 10: 7
+Optional self-evaluation out of 10: 8
